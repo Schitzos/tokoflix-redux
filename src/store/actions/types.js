@@ -1,0 +1,12 @@
+// Movie Page
+export const FETCH_MOVIE = 'FETCH_MOVIE';
+export const FETCH_MOVIE_DETAIL = 'FETCH_MOVIE_DETAIL';
+export const FETCH_MOVIE_RECOM = 'FETCH_MOVIE_RECOM';
+export const FETCH_MOVIE_SIMILAR = 'FETCH_MOVIE_SIMILAR';
+export const FETCH_POPULAR_MOVIE = 'FETCH_POPULAR_MOVIE';
+
+export const ADD_CART = 'ADD_CART';
+export const UPDATE_CART = 'UPDATE_CART';
+export const LOAD_CART = 'LOAD_CART';
+export const REMOVE_PRODUCT = 'REMOVE_PRODUCT';
+
