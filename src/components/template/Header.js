@@ -12,8 +12,6 @@ class Header extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          wallet:100000,
-          cost:0,
           display:'',
         };
     }
@@ -58,25 +56,30 @@ class Header extends Component {
     }
 
     removeProduct = (product) => {
-        alert('asdasd');
         const { cartList, updateCart } = this.props;
-        // console.log(cartList);
-        // console.log(product);
+        // console.log(cartList)
+        // console.log(product)
         const index = cartList.findIndex(p => p.id === product.id);
         if (index >= 0) {
+            // console.log(index);
             cartList.splice(index, 1);
-          updateCart(cartList);
+            updateCart(cartList);
         }
       }
     
 
     checkout (params){
-        if(this.state.wallet>params.totalPrice){
+        const { cartList, updateCart } = this.props;
+        var wallet = localStorage.getItem('wallet')
+
+        if(wallet>params.totalPrice){
             this.setState({cost: params});
-            var change = parseInt((this.state.wallet)-params.totalPrice,10)
-            this.setState({wallet: change});
+            var change = parseInt(wallet-params.totalPrice,10)
             localStorage.setItem('wallet', change);
             alert("Your purchase was successfully. The rest of your balance is IDR "+change.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+
+            cartList.length=0;
+            updateCart(cartList);
         }
         else{
             alert("You're of out Balance")
@@ -84,10 +87,31 @@ class Header extends Component {
         }
 
     }
+
+    resetAll(){
+        const { cartList, updateCart } = this.props;
+        cartList.length=0;
+        localStorage.setItem('wallet', 100000);
+        updateCart(cartList);
+}
     
   render() {
     const {cartList} = this.props
     const {totalCart} = this.props
+
+    const c = cartList.map(c => {
+        return (
+          <Cart
+            cart={c}
+            key={c.id}
+            remove = {(e) => this.removeProduct(c)}
+          />
+        );
+      });
+    // console.log(cartList);
+    const subtotal = totalCart.totalPrice.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+    var wallet = parseInt(localStorage.getItem('wallet'),10)
+    wallet = wallet.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
     return (
         <div className="header">
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -110,7 +134,29 @@ class Header extends Component {
                     </li>
                 </ul>
                 <ul className="navbar-nav navbar-right">
-                    <Cart removeProduct={(e) => this.removeProduct(cartList)} cartList={cartList} checkout={(e) => this.checkout(totalCart)} totalCart={totalCart} wallet={parseInt(localStorage.getItem('wallet'),10)} display={this.state.openCart}></Cart>
+                    <li className={`nav-item dropdown ${this.state.openCart}`}>
+                            <button className="btn btn-sm btn-success nav-link dropdown-toggle" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true"><i className="fas fa-shopping-cart"></i></button>
+                            <div className={`dropdown-menu ${this.state.openCart}`} style={{left:'-300px',maxWidth:'400px',minWidth:'350px'}} aria-labelledby="navbarDropdown2">
+                                <div className="dropdown-item">
+                                    <h6 className="float-right" style={{wordWrap:"break-word",overflowX:"hidden",fontSize:'11px',marginBottom:'-10px'}}>Balance : IDR {wallet}</h6>
+                                    <h6>Shopping Cart</h6>
+                                </div>
+                                {c}
+                            <div className="dropdown-divider"></div>
+                            <div className="dropdown-item">
+                                <div className="row">
+                                    <div className="col-12">
+                                        <h6 className="float-left">Subtotal : IDR {subtotal}</h6>
+                                        <button className="btn btn-success btn-sm float-right" onClick={(e) => this.checkout(totalCart)}>Checkout</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="dropdown-divider"></div>
+                            <div className="dropdown-item">
+                                <button className="btn btn-warning btn-sm float-right" onClick={(e) => this.resetAll()}>Reset Wallet and Cart</button>
+                            </div>
+                        </div>
+                    </li>                            
                 </ul>
             </div>
             </nav>

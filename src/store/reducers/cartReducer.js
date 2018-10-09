@@ -19,6 +19,7 @@ export default function (state = initialState, action) {
                 item: Object.assign({}, action.payload)
             };
         case REMOVE_PRODUCT:
+            console.log(action.payload);
             return {
                 ...state,
                 itemToRemove: Object.assign({}, action.payload)
