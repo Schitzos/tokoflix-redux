@@ -4,7 +4,8 @@ This Project using React and Redux.
 
 How to use
 1. git clone https://github.com/Schitzos/tokoflix.git
-2. npm install
-3. - If want to run as dev use npm start
-   - if eant to run as prod use npm run build
-4. I am using local storage to save a few thing. So if somtething went wrong, please use localStorage.clear() in your browser console;
+2. cd tokoflix
+3. npm install
+4. - If want to run as dev use npm start
+   - if want to run as prod use npm run build
+5. Hit Clear data button to reset wallet
